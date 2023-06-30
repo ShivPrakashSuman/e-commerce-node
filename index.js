@@ -2,6 +2,7 @@ const express = require('express');
 const bodyparser = require('body-parser');
 const authRouter = require('./routes/authentication');
 const categoryRouter = require('./routes/category');
+const productRouter = require('./routes/product');
 const cors = require("cors");
 const path = require('path');
 
@@ -13,6 +14,7 @@ app.use(bodyparser.urlencoded({ extended: true }))
 app.use(bodyparser.json())
 app.use('/authentication', authRouter);
 app.use('/category', categoryRouter);
+app.use('/product', productRouter);
 app.get('/reset', (_, res) => {
     res.sendFile(`${path.join(__dirname)}/reset_page.html`);
 });

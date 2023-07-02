@@ -11,7 +11,7 @@ const settings = db.sequelize.define('settings', {
     user_id: {
         type: DataTypes.BIGINT.UNSIGNED
     },
-    Key: {
+    key: {
         type: DataTypes.STRING(255)
     },
     value: {

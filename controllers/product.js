@@ -1,15 +1,24 @@
 const Joi = require("joi");
 const product = require('../modals/product');
+const productCategory = require('../modals/productCategory');
+const productInventory = require('../modals/inventory');
 
 const index = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
     try {
-        let data = await product.findAll();
-        let result = JSON.parse(JSON.stringify(data));   //  USE IT OR NOT SIR ----------------------
-        if (result) {
+        let rows = await product.findAll({
+            include    : [
+                { model: productCategory,
+                    attributes:['id', 'name']
+                },
+                { model: productInventory}
+            ]
+        })
+        let result = JSON.parse(JSON.stringify(rows));
+        if (rows) {
             resp.status = true;
             resp.message = 'Data Fatch SuccessFull';
-            resp.data = data;
+            resp.data = result;
         } else {
             resp.message = 'Not Record Found';
         }
@@ -55,19 +64,26 @@ const store = async (req, res) => {
 const update = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
     const schema = Joi.object({
-        id: Joi.string().required()
-    }).validate(req.query);
+        id: Joi.number().integer().required(),
+        name: Joi.string().required(),
+        desc: Joi.string().required(),
+        sku: Joi.string().required(),
+        price: Joi.string().required(),
+        category_id: Joi.string().required(),
+        inventory_id: Joi.string().required(),
+        discount_id: Joi.string().required()
+    }).validate(req.body);
     if (schema.error) {
         resp.message = schema.error.details[0].message;
         return res.json(resp);
     }
+    console.log('')
     try {
-        const data = res.body;
-        const result = await product.update({ name: data.name, desc: data.desc, sku: data.sku, price: data.price, category_id: data.category_id, inventory_id: data.inventory_id, discount_id: data.discount_id }, { where: { id: schema.id } });
+        const data = schema.value;
+        const result = await product.update({ name: data.name, desc: data.desc, sku: data.sku, price: data.price, category_id: data.category_id, inventory_id: data.inventory_id, discount_id: data.discount_id }, { where: { id: data.id } });
         if (result) {
             resp.status = true;
             resp.message = 'Update Data SuccessFull';
-            resp.data = result
         } else {
             resp.message = 'Data Not Update';
         }

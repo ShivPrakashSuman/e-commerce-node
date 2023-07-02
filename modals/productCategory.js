@@ -12,7 +12,7 @@ const productCategory = db.sequelize.define('productCategory', {
         type: DataTypes.STRING(255)
     },
     desc: {
-        type: DataTypes.STRING(255)
+        type:Sequelize.TEXT
     }
 }, {
     tableName: 'product_category',    

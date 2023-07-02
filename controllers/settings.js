@@ -1,14 +1,14 @@
 const Joi = require("joi");
-const productCategory = require('../modals/productCategory');
+const settings = require('../modals/settings');
 
 const index = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
     try {
-        let data = await productCategory.findAll();
-        let result = JSON.parse(JSON.stringify(data));   //  USE IT OR NOT SIR ----------------------
+        let data = await settings.findAll();
+        let result = JSON.parse(JSON.stringify(data));  
         resp.status = true;
         resp.message = 'Data Fatch SuccessFull';
-        resp.data = data;
+        resp.data = result;
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);
@@ -19,8 +19,10 @@ const index = async (req, res) => {
 const store = async (req, res) => {
     let resp = { status: false, message: 'Oops Somethimg went wrong?', data: null };
     const schema = Joi.object({
-        name: Joi.string().required(),
-        desc: Joi.string().required()
+        user_id: Joi.string().required(),
+        key: Joi.string().required(),
+        value: Joi.string().required(),
+        type: Joi.string().required()
     }).validate(req.body);
     if (schema.error) {
         resp.message = schema.error.details[0].message;
@@ -28,9 +30,9 @@ const store = async (req, res) => {
     }
     try {
         const data = schema.value;
-        const result = await productCategory.create(data);  // Insert data with Create Table 
+        const result = await settings.create(data);  // Insert data with Create Table 
         resp.status = true;
-        resp.message = 'Category Registered Successfully';
+        resp.message = 'Settings Registered Successfully';
         resp.data = result;
         return res.json(resp);
     } catch (e) {
@@ -42,15 +44,20 @@ const store = async (req, res) => {
 const update = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
     const schema = Joi.object({
-        id: Joi.string().required()
-    }).validate(req.query);
+        id: Joi.number().integer().required(),
+        user_id: Joi.string().required(),
+        key: Joi.string().required(),
+        value: Joi.string().required(),
+        type: Joi.string().required()
+    }).validate(req.body);
     if (schema.error) {
         resp.message = schema.error.details[0].message;
         return res.json(resp);
     }
     try {
-        const data = res.body;
-        const result = await productCategory.update({ name: data.name, desc: data.desc }, { where: { id: schema.id } });
+        const data = schema.value;
+        console.log('data',data)
+        const result = await settings.update({ user_id: data.user_id, key: data.key, value: data.value, type: data.type }, { where: { id: data.id } });
         resp.status = true;
         resp.message = 'Update Data SuccessFull';
         resp.data = result
@@ -72,7 +79,7 @@ const deleteRow = async (req, res) => {
     }
     try {
         const data = schema.value;
-        await productCategory.destroy({ where: { id: data.id } });
+        await settings.destroy({ where: { id: data.id } });
         resp.status = true;
         resp.message = 'Row Delete SuccessFull!';
         return res.json(resp);
@@ -93,7 +100,7 @@ const show = async (req, res) => {
     }
     try {
         const data = schema.value;
-        const result = await productCategory.findOne({ where: { id: data.id } });
+        const result = await settings.findOne({ where: { id: data.id } });
         resp.status = true;
         resp.message = 'Row Data Fatch SuccessFull';
         resp.data = result;

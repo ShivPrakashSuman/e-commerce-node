@@ -1,11 +1,11 @@
 const Joi = require("joi");
-const productInventory = require('../modals/inventory');
+const userAddress = require('../modals/userAddress ');
 
 const index = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
     try {
-        let data = await productInventory.findAll();
-        let result = JSON.parse(JSON.stringify(data));   //  USE IT OR NOT SIR ----------------------
+        let data = await userAddress.findAll();
+        let result = JSON.parse(JSON.stringify(data));  
         resp.status = true;
         resp.message = 'Data Fatch SuccessFull';
         resp.data = result;
@@ -19,7 +19,16 @@ const index = async (req, res) => {
 const store = async (req, res) => {
     let resp = { status: false, message: 'Oops Somethimg went wrong?', data: null };
     const schema = Joi.object({
-        quantity: Joi.string().required()
+        user_id: Joi.string().required(),
+        house_no: Joi.string().required(),
+        floor_no: Joi.string().required(),
+        address: Joi.string().required(),
+        landmark: Joi.string().required(),
+        city: Joi.string().required(),
+        state: Joi.string().required(),
+        country: Joi.string().required(),
+        pincode: Joi.string().required(),
+        mobile_no: Joi.string().required()
     }).validate(req.body);
     if (schema.error) {
         resp.message = schema.error.details[0].message;
@@ -27,9 +36,9 @@ const store = async (req, res) => {
     }
     try {
         const data = schema.value;
-        const result = await productInventory.create(data);  // Insert data with Create Table 
+        const result = await userAddress.create(data);  // Insert data with Create Table 
         resp.status = true;
-        resp.message = 'Inventory Registered Successfully';
+        resp.message = 'User Address Registered Successfully';
         resp.data = result;
         return res.json(resp);
     } catch (e) {
@@ -41,15 +50,26 @@ const store = async (req, res) => {
 const update = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
     const schema = Joi.object({
-        id: Joi.string().required()
-    }).validate(req.query);
+        id: Joi.string().required(),
+        user_id: Joi.string().required(),
+        house_no: Joi.string().required(),
+        floor_no: Joi.string().required(),
+        address: Joi.string().required(),
+        landmark: Joi.string().required(),
+        city: Joi.string().required(),
+        state: Joi.string().required(),
+        country: Joi.string().required(),
+        pincode: Joi.string().required(),
+        mobile_no: Joi.string().required()
+    }).validate(req.body);
     if (schema.error) {
         resp.message = schema.error.details[0].message;
         return res.json(resp);
     }
     try {
-        const data = res.body;
-        const result = await productInventory.update({ quantity: data.quantity }, { where: { id: schema.id } });
+        const data = schema.value;
+        const result = await userAddress.update({ user_id: data.user_id, house_no: data.house_no, floor_no: data.floor_no, address: data.address, landmark: data.landmark,
+                         city: data.city, state: data.state, pincode: data.pincode, mobile_no:data.mobile_no  }, { where: { id: data.id } });
         resp.status = true;
         resp.message = 'Update Data SuccessFull';
         resp.data = result
@@ -71,7 +91,7 @@ const deleteRow = async (req, res) => {
     }
     try {
         const data = schema.value;
-        await productInventory.destroy({ where: { id: data.id } });
+        await userAddress.destroy({ where: { id: data.id } });
         resp.status = true;
         resp.message = 'Row Delete SuccessFull!';
         return res.json(resp);
@@ -91,8 +111,8 @@ const show = async (req, res) => {
         return res.json(resp);
     }
     try {
-        const data = schema.value;
-        const result = await productInventory.findOne({ where: { id: data.id } });
+        const data = await userAddress.findOne({ where: { id: schema.value.id } });
+        const result = JSON.parse(JSON.stringify(data));
         resp.status = true;
         resp.message = 'Row Data Fatch SuccessFull';
         resp.data = result;

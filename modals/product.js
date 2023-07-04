@@ -40,7 +40,7 @@ const product = db.sequelize.define('product', {
     freezeTableName: true
 });
 
-product.hasOne(productCategory, { foreignKey: 'id' });
+product.hasMany(productCategory, { foreignKey: 'id' });
 product.hasOne(productInventory, { foreignKey: 'id' });
 product.hasOne(productDiscount, { foreignKey: 'id' });
 //This creates the table if it doesn't exist (and does nothing if it already exists)

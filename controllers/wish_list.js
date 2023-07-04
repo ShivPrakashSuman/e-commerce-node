@@ -1,11 +1,11 @@
 const Joi = require("joi");
-const productInventory = require('../modals/inventory');
+const wish_list = require('../modals/wish_list');
 
 const index = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
     try {
-        let data = await productInventory.findAll();
-        let result = JSON.parse(JSON.stringify(data));   //  USE IT OR NOT SIR ----------------------
+        let data = await wish_list.findAll();
+        let result = JSON.parse(JSON.stringify(data)); 
         resp.status = true;
         resp.message = 'Data Fatch SuccessFull';
         resp.data = result;
@@ -19,7 +19,8 @@ const index = async (req, res) => {
 const store = async (req, res) => {
     let resp = { status: false, message: 'Oops Somethimg went wrong?', data: null };
     const schema = Joi.object({
-        quantity: Joi.string().required()
+        user_id: Joi.string().required(),
+        product_id: Joi.string().required()
     }).validate(req.body);
     if (schema.error) {
         resp.message = schema.error.details[0].message;
@@ -27,32 +28,10 @@ const store = async (req, res) => {
     }
     try {
         const data = schema.value;
-        const result = await productInventory.create(data);  // Insert data with Create Table 
+        const result = await wish_list.create(data);  // Insert data with Create Table 
         resp.status = true;
-        resp.message = 'Inventory Registered Successfully';
+        resp.message = 'Cart Table Registered Successfully';
         resp.data = result;
-        return res.json(resp);
-    } catch (e) {
-        console.log('catch error', e);
-        return res.json(resp);
-    }
-}
-
-const update = async (req, res) => {
-    let resp = { status: false, message: 'Oops Something went worng', data: null };
-    const schema = Joi.object({
-        id: Joi.string().required()
-    }).validate(req.query);
-    if (schema.error) {
-        resp.message = schema.error.details[0].message;
-        return res.json(resp);
-    }
-    try {
-        const data = res.body;
-        const result = await productInventory.update({ quantity: data.quantity }, { where: { id: schema.id } });
-        resp.status = true;
-        resp.message = 'Update Data SuccessFull';
-        resp.data = result
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);
@@ -71,7 +50,7 @@ const deleteRow = async (req, res) => {
     }
     try {
         const data = schema.value;
-        await productInventory.destroy({ where: { id: data.id } });
+        await wish_list.destroy({ where: { id: data.id } });
         resp.status = true;
         resp.message = 'Row Delete SuccessFull!';
         return res.json(resp);
@@ -92,7 +71,7 @@ const show = async (req, res) => {
     }
     try {
         const data = schema.value;
-        const result = await productInventory.findOne({ where: { id: data.id } });
+        const result = await wish_list.findOne({ where: { id: data.id } });
         resp.status = true;
         resp.message = 'Row Data Fatch SuccessFull';
         resp.data = result;
@@ -104,4 +83,4 @@ const show = async (req, res) => {
 }
 
 
-module.exports = { index, store, update, deleteRow, show };
+module.exports = { index, store, deleteRow, show };

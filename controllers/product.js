@@ -11,7 +11,7 @@ const index = async (req, res) => {
                 { model: productCategory,
                     attributes:['id', 'name']
                 },
-                { model: productInventory}
+                { model: productInventory }
             ]
         })
         let result = JSON.parse(JSON.stringify(rows));

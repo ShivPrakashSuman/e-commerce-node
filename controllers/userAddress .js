@@ -5,10 +5,14 @@ const index = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
     try {
         let data = await userAddress.findAll();
-        let result = JSON.parse(JSON.stringify(data));  
-        resp.status = true;
-        resp.message = 'Data Fatch SuccessFull';
-        resp.data = result;
+        let result = JSON.parse(JSON.stringify(data));
+        if (result) {
+            resp.status = true;
+            resp.message = 'Data Fatch SuccessFull';
+            resp.data = result;
+        } else {
+            resp.message = 'Not Record Found';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);
@@ -37,9 +41,13 @@ const store = async (req, res) => {
     try {
         const data = schema.value;
         const result = await userAddress.create(data);  // Insert data with Create Table 
-        resp.status = true;
-        resp.message = 'User Address Registered Successfully';
-        resp.data = result;
+        if (result) {
+            resp.status = true;
+            resp.message = 'User Address Registered Successfully';
+            resp.data = result;
+        } else {
+            resp.message = 'Registered Failed ?';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);
@@ -68,11 +76,17 @@ const update = async (req, res) => {
     }
     try {
         const data = schema.value;
-        const result = await userAddress.update({ user_id: data.user_id, house_no: data.house_no, floor_no: data.floor_no, address: data.address, landmark: data.landmark,
-                         city: data.city, state: data.state, pincode: data.pincode, mobile_no:data.mobile_no  }, { where: { id: data.id } });
-        resp.status = true;
-        resp.message = 'Update Data SuccessFull';
-        resp.data = result
+        const result = await userAddress.update({
+            user_id: data.user_id, house_no: data.house_no, floor_no: data.floor_no, address: data.address, landmark: data.landmark,
+            city: data.city, state: data.state, pincode: data.pincode, mobile_no: data.mobile_no
+        }, { where: { id: data.id } });
+        if (result) {
+            resp.status = true;
+            resp.message = 'Update Data SuccessFull';
+            resp.data = result
+        } else {
+            resp.message = 'Updated Failed ?';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);
@@ -113,9 +127,13 @@ const show = async (req, res) => {
     try {
         const data = await userAddress.findOne({ where: { id: schema.value.id } });
         const result = JSON.parse(JSON.stringify(data));
-        resp.status = true;
-        resp.message = 'Row Data Fatch SuccessFull';
-        resp.data = result;
+        if (result) {
+            resp.status = true;
+            resp.message = 'Row Data Fatch SuccessFull';
+            resp.data = result;
+        } else {
+            resp.message = 'Not Record Found';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);

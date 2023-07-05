@@ -13,7 +13,7 @@ const signup = async (req, res) => {
         last_name: Joi.string().required(),
         email: Joi.string().trim().email().required(),
         password: Joi.string().min(4).max(8).required(),
-        confirmpassword:  Joi.ref('password'),
+        confirmpassword: Joi.ref('password'),
         date_of_birth: Joi.string().required(),
         gender: Joi.string().required(),
     }).validate(req.body);
@@ -40,9 +40,13 @@ const signup = async (req, res) => {
                 gender: data.gender,
             }
             const result = await User.create(userData);  // Insert data with Create Table 
-            resp.status = true;
-            resp.message = 'User Registered Successfully';
-            resp.data = result;
+            if (result) {
+                resp.status = true;
+                resp.message = 'User Registered Successfully';
+                resp.data = result;
+            } else {
+                resp.message = 'Not Record Registered';
+            }
             return res.json(resp);
         }
     } catch (e) {
@@ -125,7 +129,7 @@ const reset = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went wrong ?', data: null };
     const schema = Joi.object({
         password: Joi.string().min(4).max(8).required(),
-        confirmpassword:  Joi.ref('password'),
+        confirmpassword: Joi.ref('password'),
         token: Joi.string()
     }).validate(req.body);
     if (schema.error) {

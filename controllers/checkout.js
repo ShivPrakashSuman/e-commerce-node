@@ -5,10 +5,14 @@ const index = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
     try {
         let data = await checkout.findAll();
-        let result = JSON.parse(JSON.stringify(data));  
-        resp.status = true;
-        resp.message = 'Data Fatch SuccessFull';
-        resp.data = result;
+        let result = JSON.parse(JSON.stringify(data));
+        if (result) {
+            resp.status = true;
+            resp.message = 'Data Fatch SuccessFull';
+            resp.data = result;
+        } else {
+            resp.message = 'Not Record Found';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);
@@ -38,9 +42,13 @@ const store = async (req, res) => {
     try {
         const data = schema.value;
         const result = await checkout.create(data);  // Insert data with Create Table 
-        resp.status = true;
-        resp.message = 'checkout Registered Successfully';
-        resp.data = result;
+        if (result) {
+            resp.status = true;
+            resp.message = 'checkout Registered Successfully';
+            resp.data = result;
+        } else {
+            resp.message = 'Registered Failed ?';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);
@@ -81,9 +89,13 @@ const show = async (req, res) => {
     try {
         const data = await checkout.findOne({ where: { id: schema.value.id } });
         const result = JSON.parse(JSON.stringify(data));
-        resp.status = true;
-        resp.message = 'Row Data Fatch SuccessFull';
-        resp.data = result;
+        if (result) {
+            resp.status = true;
+            resp.message = 'Row Data Fatch SuccessFull';
+            resp.data = result;
+        } else {
+            resp.message = 'Not Record Found';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);

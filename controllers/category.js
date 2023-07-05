@@ -5,10 +5,14 @@ const index = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
     try {
         let data = await productCategory.findAll();
-        let result = JSON.parse(JSON.stringify(data));   //  USE IT OR NOT SIR ----------------------
-        resp.status = true;
-        resp.message = 'Data Fatch SuccessFull';
-        resp.data = data;
+        let result = JSON.parse(JSON.stringify(data));
+        if (result) {
+            resp.status = true;
+            resp.message = 'Data Fatch SuccessFull';
+            resp.data = result;
+        } else {
+            resp.message = 'Not Record Found';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);
@@ -29,9 +33,13 @@ const store = async (req, res) => {
     try {
         const data = schema.value;
         const result = await productCategory.create(data);  // Insert data with Create Table 
-        resp.status = true;
-        resp.message = 'Category Registered Successfully';
-        resp.data = result;
+        if (result) {
+            resp.status = true;
+            resp.message = 'Category Registered Successfully';
+            resp.data = result;
+        } else {
+            resp.message = 'Registered Failed ?';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);
@@ -51,9 +59,13 @@ const update = async (req, res) => {
     try {
         const data = res.body;
         const result = await productCategory.update({ name: data.name, desc: data.desc }, { where: { id: schema.id } });
-        resp.status = true;
-        resp.message = 'Update Data SuccessFull';
-        resp.data = result
+        if (result) {
+            resp.status = true;
+            resp.message = 'Update Data SuccessFull';
+            resp.data = result;
+        } else {
+            resp.message = 'Update Failed';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);
@@ -92,11 +104,15 @@ const show = async (req, res) => {
         return res.json(resp);
     }
     try {
-        const data = schema.value;
-        const result = await productCategory.findOne({ where: { id: data.id } });
-        resp.status = true;
-        resp.message = 'Row Data Fatch SuccessFull';
-        resp.data = result;
+        const data = await productCategory.findOne({ where: { id: schema.value.id } });
+        const result = JSON.parse(JSON.stringify(data));
+        if (result) {
+            resp.status = true;
+            resp.message = 'Row Data Fatch SuccessFull';
+            resp.data = result;
+        } else {
+            resp.message = 'Not Record Found';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);

@@ -5,10 +5,14 @@ const index = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
     try {
         let data = await productInventory.findAll();
-        let result = JSON.parse(JSON.stringify(data));   //  USE IT OR NOT SIR ----------------------
-        resp.status = true;
-        resp.message = 'Data Fatch SuccessFull';
-        resp.data = result;
+        let result = JSON.parse(JSON.stringify(data));
+        if (result) {
+            resp.status = true;
+            resp.message = 'Data Fatch SuccessFull';
+            resp.data = result;
+        } else {
+            resp.message = 'Not Record Found';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);
@@ -28,9 +32,13 @@ const store = async (req, res) => {
     try {
         const data = schema.value;
         const result = await productInventory.create(data);  // Insert data with Create Table 
-        resp.status = true;
-        resp.message = 'Inventory Registered Successfully';
-        resp.data = result;
+        if (result) {
+            resp.status = true;
+            resp.message = 'Inventory Registered Successfully';
+            resp.data = result;
+        } else {
+            resp.message = 'Registered Failed ?';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);
@@ -50,9 +58,13 @@ const update = async (req, res) => {
     try {
         const data = res.body;
         const result = await productInventory.update({ quantity: data.quantity }, { where: { id: schema.id } });
-        resp.status = true;
-        resp.message = 'Update Data SuccessFull';
-        resp.data = result
+        if (result) {
+            resp.status = true;
+            resp.message = 'Update Data SuccessFull';
+            resp.data = result
+        } else {
+            resp.message = 'Update Failed ?';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);
@@ -93,9 +105,13 @@ const show = async (req, res) => {
     try {
         const data = schema.value;
         const result = await productInventory.findOne({ where: { id: data.id } });
-        resp.status = true;
-        resp.message = 'Row Data Fatch SuccessFull';
-        resp.data = result;
+        if (result) {
+            resp.status = true;
+            resp.message = 'Row Data Fatch SuccessFull';
+            resp.data = result;
+        } else {
+            resp.message = 'Not Record Found';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);

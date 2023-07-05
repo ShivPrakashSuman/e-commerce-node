@@ -10,6 +10,7 @@ const cartListRouter = require('./routes/cartTable');
 const wishListRouter = require('./routes/wish_list');
 const checkoutRouter = require('./routes/checkout');
 const userAddressRouter = require('./routes/userAddress');
+const orderListRouter = require('./routes/order_list');
 
 const cors = require("cors");
 const path = require('path');
@@ -29,6 +30,7 @@ app.use('/cartlist', cartListRouter);
 app.use('/wishlist', wishListRouter);
 app.use('/checkout', checkoutRouter);
 app.use('/useraddress', userAddressRouter);
+app.use('/orderlist', orderListRouter);
 
 app.get('/reset', (_, res) => {
     res.sendFile(`${path.join(__dirname)}/reset_page.html`);

@@ -2,6 +2,7 @@ const Joi = require("joi");
 const product = require('../modals/product');
 const productCategory = require('../modals/productCategory');
 const productInventory = require('../modals/inventory');
+const productDiscount = require('../modals/discount');
 
 const index = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
@@ -9,13 +10,14 @@ const index = async (req, res) => {
         let rows = await product.findAll({
             include    : [
                 { model: productCategory,
-                    attributes:['id', 'name']
+                    attributes:['id', 'name', 'desc']
                 },
-                { model: productInventory }
+                { model: productInventory },
+                { model: productDiscount }
             ]
         })
         let result = JSON.parse(JSON.stringify(rows));
-        if (rows) {
+        if (result) {
             resp.status = true;
             resp.message = 'Data Fatch SuccessFull';
             resp.data = result;

@@ -5,10 +5,14 @@ const index = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
     try {
         let data = await cartTable.findAll();
-        let result = JSON.parse(JSON.stringify(data)); 
-        resp.status = true;
-        resp.message = 'Data Fatch SuccessFull';
-        resp.data = result;
+        let result = JSON.parse(JSON.stringify(data));
+        if (result) {
+            resp.status = true;
+            resp.message = 'Data Fatch SuccessFull';
+            resp.data = result;
+        } else {
+            resp.message = 'Not Record Found';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);
@@ -30,9 +34,13 @@ const store = async (req, res) => {
     try {
         const data = schema.value;
         const result = await cartTable.create(data);  // Insert data with Create Table 
-        resp.status = true;
-        resp.message = 'Cart Table Registered Successfully';
-        resp.data = result;
+        if (result) {
+            resp.status = true;
+            resp.message = 'Cart Table Registered Successfully';
+            resp.data = result;
+        } else {
+            resp.message = 'Not Record Registered';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);
@@ -55,9 +63,13 @@ const update = async (req, res) => {
     try {
         const data = schema.value;
         const result = await cartTable.update({ user_id: data.user_id, product_id: data.product_id, quantity: data.quantity }, { where: { id: data.id } });
-        resp.status = true;
-        resp.message = 'Update Data SuccessFull';
-        resp.data = result
+        if (result) {
+            resp.status = true;
+            resp.message = 'Update Data SuccessFull';
+            resp.data = result
+        } else {
+            resp.message = 'Not Record Updated';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);
@@ -96,11 +108,15 @@ const show = async (req, res) => {
         return res.json(resp);
     }
     try {
-        const data = schema.value;
-        const result = await cartTable.findOne({ where: { id: data.id } });
-        resp.status = true;
-        resp.message = 'Row Data Fatch SuccessFull';
-        resp.data = result;
+        const data = await cartTable.findOne({ where: { id: schema.value.id } });
+        const result = JSON.parse(JSON.stringify(data));
+        if (result) {
+            resp.status = true;
+            resp.message = 'Row Data Fatch SuccessFull';
+            resp.data = result;
+        } else {
+            resp.message = 'Not Record Found';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);

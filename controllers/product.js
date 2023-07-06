@@ -4,13 +4,13 @@ const productCategory = require('../modals/productCategory');
 const productInventory = require('../modals/inventory');
 const productDiscount = require('../modals/discount');
 const { Op } = require("sequelize");
-const pegnation = require("../helper/pegnationApi");
+const pagination  = require("../helper/paginationApi");
 
 const index = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
     try {
         let totalRow = JSON.parse(JSON.stringify(await product.findAll()));
-        let pg = await pegnation(totalRow, req.query);  // pegnation Api ----
+        let pg = await pagination (totalRow, req.query);  // pagination  Api ----
 
         let rows = await product.findAll({
             include    : [

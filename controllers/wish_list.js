@@ -1,13 +1,13 @@
 const Joi = require("joi");
 const wish_list = require('../modals/wish_list');
 const { Op } = require("sequelize");
-const pegnation = require("../helper/pegnationApi");
+const pagination  = require("../helper/paginationApi");
 
 const index = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
     try {
         let totalRow = JSON.parse(JSON.stringify(await wish_list.findAll()));
-        let pg = await pegnation(totalRow, req.query);  // pegnation Api ----
+        let pg = await pagination(totalRow, req.query);  // pagination  Api ----
         data = await wish_list.findAll({
             limit: pg.limit,
             offset: pg.offset,

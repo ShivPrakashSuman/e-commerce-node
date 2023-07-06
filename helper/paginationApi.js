@@ -1,5 +1,5 @@
 
-const pegnation = async (totalRow, req) => {
+const pagination = async (totalRow, req) => {
     return new Promise(async (resolve, reject) => {
         var search = req.search ? req.search : '';
         var limit = req.limit ? req.limit : 2;
@@ -29,4 +29,4 @@ const pegnation = async (totalRow, req) => {
     });
 }
 
-module.exports = pegnation;
+module.exports = pagination ;

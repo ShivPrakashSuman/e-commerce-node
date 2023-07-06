@@ -1,15 +1,27 @@
 const Joi = require("joi");
 const userAddress = require('../modals/userAddress ');
+const pegnation = require("../helper/pegnationApi");
 
 const index = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
     try {
-        let data = await userAddress.findAll();
+        let totalRow = JSON.parse(JSON.stringify(await userAddress.findAll()));
+        let pg = await pegnation(totalRow, req.query);  // pegnation Api ----
+        data = await userAddress.findAll({
+            limit: pg.limit,
+            offset: pg.offset,
+            order: [[pg.order_by, pg.order_type]],
+        });
         let result = JSON.parse(JSON.stringify(data));
         if (result) {
             resp.status = true;
             resp.message = 'Data Fatch SuccessFull';
-            resp.data = result;
+            resp.data = {
+                data: result,
+                page: pg.page,
+                totalPage: pg.totalPage,
+                alluserAddress: pg.totalRow
+            };
         } else {
             resp.message = 'Not Record Found';
         }

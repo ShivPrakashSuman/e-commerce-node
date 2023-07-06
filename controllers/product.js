@@ -3,10 +3,15 @@ const product = require('../modals/product');
 const productCategory = require('../modals/productCategory');
 const productInventory = require('../modals/inventory');
 const productDiscount = require('../modals/discount');
+const { Op } = require("sequelize");
+const pegnation = require("../helper/pegnationApi");
 
 const index = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
     try {
+        let totalRow = JSON.parse(JSON.stringify(await product.findAll()));
+        let pg = await pegnation(totalRow, req.query);  // pegnation Api ----
+
         let rows = await product.findAll({
             include    : [
                 { model: productCategory,
@@ -14,13 +19,29 @@ const index = async (req, res) => {
                 },
                 { model: productInventory },
                 { model: productDiscount }
-            ]
+            ],
+            where: {
+                [Op.or]: [
+                    { 'id': { [Op.like]: '%' + pg.search + '%' } },
+                    { 'name': { [Op.like]: '%' + pg.search + '%' } },
+                    { 'sku': { [Op.like]: '%' + pg.search + '%' } },
+                    { 'price': { [Op.like]: '%' + pg.search + '%' } }
+                ]
+            },
+            limit: pg.limit,
+            offset: pg.offset,
+            order: [[pg.order_by, pg.order_type]],
         })
         let result = JSON.parse(JSON.stringify(rows));
         if (result) {
             resp.status = true;
             resp.message = 'Data Fatch SuccessFull';
-            resp.data = result;
+            resp.data = {
+                data: result,
+                page: pg.page,
+                totalPage: pg.totalPage,
+                allProduct: pg.totalRow
+            };
         } else {
             resp.message = 'Not Record Found';
         }

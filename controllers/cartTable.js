@@ -1,10 +1,15 @@
 const Joi = require("joi");
 const cartTable = require('../modals/cartTable');
+const product = require("../modals/product");
 
 const index = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
     try {
-        let data = await cartTable.findAll();
+        let data = await cartTable.findAll({
+            include: [
+                { model: product, attributes:['id', 'name', 'desc', 'price']}
+            ]
+        });
         let result = JSON.parse(JSON.stringify(data));
         if (result) {
             resp.status = true;

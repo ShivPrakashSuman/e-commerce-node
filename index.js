@@ -35,7 +35,7 @@ app.use('/useraddress', userAddressRouter);
 app.use('/orderlist', orderListRouter);
 
 app.get('/reset', (_, res) => {
-    res.sendFile(`${path.join(__dirname)}/reset_page.html`);
+    res.sendFile(`${path.join(__dirname)}/view/reset_page.html`);
 });
 
 app.listen(3003, function () {

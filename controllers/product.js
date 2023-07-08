@@ -107,6 +107,7 @@ const update = async (req, res) => {
         if (result) {
             resp.status = true;
             resp.message = 'Update Data SuccessFull';
+            resp.data = result
         } else {
             resp.message = 'Data Not Update';
         }

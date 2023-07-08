@@ -4,7 +4,8 @@ const config = require('../config/jwt_config');
 const verifyToken = (req, res, next) => {
     let allowURL = [
         '/authentication/login',
-        '/authentication/register',
+        '/authentication/signup',
+        '/reset',
         '/uploads'
     ];
     if (allowURL.includes(req.path) || (req.path.search(/uploads/) > -1 ? true : false)) {

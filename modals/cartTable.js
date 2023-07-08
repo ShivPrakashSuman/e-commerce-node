@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const db = require("../helper/db.js");
+const product = require('./product.js');
 
 const cartTable = db.sequelize.define('cartTable', {
     id: {
@@ -21,6 +22,8 @@ const cartTable = db.sequelize.define('cartTable', {
     tableName: 'cart_table',
     freezeTableName: true
 });
+cartTable.belongsTo(product, {foreignKey: 'product_id'});
+
 cartTable.sync().then(() => {
     //console.log('Cart Table table created successfully!');
 }).catch((error) => {

@@ -56,8 +56,8 @@ const update = async (req, res) => {
         return res.json(resp);
     }
     try {
-        const data = res.body;
-        const result = await productInventory.update({ quantity: data.quantity }, { where: { id: schema.id } });
+        const data = req.body;
+        const result = await productInventory.update({ quantity: data.quantity }, { where: { id: schema.value.id } });
         if (result) {
             resp.status = true;
             resp.message = 'Update Data SuccessFull';

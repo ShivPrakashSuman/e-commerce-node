@@ -57,8 +57,9 @@ const update = async (req, res) => {
         return res.json(resp);
     }
     try {
-        const data = res.body;
-        const result = await productCategory.update({ name: data.name, desc: data.desc }, { where: { id: schema.id } });
+        const data = req.body;
+        console.log('data ', req.body)
+        const result = await productCategory.update({ name: data.name, desc: data.desc }, { where: { id: schema.value.id } });
         if (result) {
             resp.status = true;
             resp.message = 'Update Data SuccessFull';

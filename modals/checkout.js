@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const db = require("../helper/db.js");
 
-const checkout = db.sequelize.define('product', {
+const checkout = db.sequelize.define('checkout', {
     id: {
         autoIncrement: true,
         type: DataTypes.BIGINT.UNSIGNED,

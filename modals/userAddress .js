@@ -1,7 +1,9 @@
+
 const { Sequelize, DataTypes } = require('sequelize');
 const db = require("../helper/db.js");
 
-const userAddress  = db.sequelize.define('userAddress ', {
+const user_address = db.sequelize.define('user_address', {
+    // Model attributes are defined here
     id: {
         autoIncrement: true,
         type: DataTypes.BIGINT.UNSIGNED,
@@ -11,7 +13,7 @@ const userAddress  = db.sequelize.define('userAddress ', {
     user_id: {
         type: DataTypes.INTEGER
     },
-    house_no : {
+    house_no: {
         type: DataTypes.INTEGER
     },
     floor_no: {
@@ -43,12 +45,14 @@ const userAddress  = db.sequelize.define('userAddress ', {
     freezeTableName: true
 });
 
-userAddress .sync().then(() => {
-    //console.log('userAddress  table created successfully!');
+user_address.sync().then(() => {
+    //console.log('user_address table created successfully!');
 }).catch((error) => {
-    console.error('Unable to create table : ', error);
+    console.error('Unable to create table : ', user_address);
 });
-console.log(userAddress  === db.sequelize.models.userAddress ); // true
+
+// `sequelize.define` also returns the model
+console.log(user_address === db.sequelize.models.user_address); // true
 
 
-module.exports = userAddress;
+module.exports = user_address;

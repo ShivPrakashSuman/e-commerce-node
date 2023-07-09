@@ -1,11 +1,11 @@
 const Joi = require("joi");
-const cartTable = require('../modals/cartTable');
+const cart_table = require('../modals/cartTable');
 const product = require("../modals/product");
 
 const index = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
     try {
-        let data = await cartTable.findAll({
+        let data = await cart_table.findAll({
             include: [
                 { model: product, attributes:['id', 'name', 'desc', 'price']}
             ]
@@ -38,7 +38,7 @@ const store = async (req, res) => {
     }
     try {
         const data = schema.value;
-        const result = await cartTable.create(data);  // Insert data with Create Table 
+        const result = await cart_table.create(data);  // Insert data with Create Table 
         if (result) {
             resp.status = true;
             resp.message = 'Cart Table Registered Successfully';
@@ -67,7 +67,7 @@ const update = async (req, res) => {
     }
     try {
         const data = schema.value;
-        const result = await cartTable.update({ user_id: data.user_id, product_id: data.product_id, quantity: data.quantity }, { where: { id: data.id } });
+        const result = await cart_table.update({ user_id: data.user_id, product_id: data.product_id, quantity: data.quantity }, { where: { id: data.id } });
         if (result) {
             resp.status = true;
             resp.message = 'Update Data SuccessFull';
@@ -93,7 +93,7 @@ const deleteRow = async (req, res) => {
     }
     try {
         const data = schema.value;
-        await cartTable.destroy({ where: { id: data.id } });
+        await cart_table.destroy({ where: { id: data.id } });
         resp.status = true;
         resp.message = 'Row Delete SuccessFull!';
         return res.json(resp);
@@ -113,7 +113,7 @@ const show = async (req, res) => {
         return res.json(resp);
     }
     try {
-        const data = await cartTable.findOne({ where: { id: schema.value.id } });
+        const data = await cart_table.findOne({ where: { id: schema.value.id } });
         const result = JSON.parse(JSON.stringify(data));
         if (result) {
             resp.status = true;

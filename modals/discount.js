@@ -26,7 +26,7 @@ const productDiscount = db.sequelize.define('productDiscount', {
     freezeTableName: true
 });
 productDiscount.sync().then(() => {
-    //console.log('productDiscount table created successfully!');
+   // console.log('product Discount table created successfully!');
 }).catch((error) => {
     console.error('Unable to create table : ', error);
 });

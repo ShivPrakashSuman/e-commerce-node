@@ -20,11 +20,11 @@ const productCategory = db.sequelize.define('productCategory', {
 });
 //This creates the table if it doesn't exist (and does nothing if it already exists)
 productCategory.sync().then(() => {
-   //console.log('productCategory table created successfully!');
+   //console.log('product Category table created successfully!');
 }).catch((error) => {
     console.error('Unable to create table : ', error);
 });
-console.log(productCategory === db.sequelize.models.productCategory); // true
+//console.log(productCategory === db.sequelize.models.productCategory); // true
 
 
 module.exports = productCategory;

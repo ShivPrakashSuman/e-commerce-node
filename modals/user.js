@@ -22,6 +22,9 @@ const User = db.sequelize.define('User', {
     password: {
         type: DataTypes.STRING(255)
     },
+    mobile: {
+        type: DataTypes.STRING(255)
+    },
     date_of_birth: {
         type: DataTypes.STRING(255)
     },

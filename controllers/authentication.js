@@ -14,6 +14,7 @@ const signup = async (req, res) => {
         email: Joi.string().trim().email().required(),
         password: Joi.string().min(4).max(8).required(),
         confirmpassword: Joi.ref('password'),
+        mobile : Joi.string().required(),
         date_of_birth: Joi.string().required(),
         gender: Joi.string().required(),
     }).validate(req.body);
@@ -36,6 +37,7 @@ const signup = async (req, res) => {
                 last_name: data.last_name,
                 email: data.email,
                 password: hash,
+                mobile: data.mobile,
                 date_of_birth: data.date_of_birth,
                 gender: data.gender,
             }
@@ -71,7 +73,7 @@ const login = async (req, res) => {
         if (emailExist) {
             let userData = JSON.parse(JSON.stringify(emailExist));
             if (bcrypt.compareSync(data.password, userData.password)) {
-                let token = jsonwebtoken.sign({ userData }, config.JWT_SECRET, { expiresIn: '5hr' });
+                let token = jsonwebtoken.sign({ userData }, config.JWT_SECRET, { expiresIn: '12hr' });
                 resp.status = true;
                 resp.message = 'Login SuccessFull';
                 resp.data = { user: userData, token: token };

@@ -24,7 +24,7 @@ const cart_table = db.sequelize.define('cart_table', {
     freezeTableName: true
 });
 
-//cart_table.belongsTo(product, {foreignKey: 'product_id'});
+cart_table.belongsTo(product, {foreignKey: 'product_id'});
 
 cart_table.sync().then(() => {
     //console.log('cart_table table created successfully!');

@@ -80,9 +80,13 @@ const deleteRow = async (req, res) => {
     }
     try {
         const data = schema.value;
-        await order_list.destroy({ where: { id: data.id } });
-        resp.status = true;
-        resp.message = 'Row Delete SuccessFull!';
+        let result = await order_list.destroy({ where: { id: data.id } });
+        if (result) {
+            resp.status = true;
+            resp.message = 'Row Delete SuccessFull!';
+        } else {
+            resp.message = 'Id Note Found';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);

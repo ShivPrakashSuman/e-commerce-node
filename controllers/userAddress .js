@@ -87,11 +87,9 @@ const update = async (req, res) => {
         return res.json(resp);
     }
     try {
-        const data = schema.value;
-        const result = await userAddress.update({
-            user_id: data.user_id, house_no: data.house_no, floor_no: data.floor_no, address: data.address, landmark: data.landmark,
-            city: data.city, state: data.state, pincode: data.pincode, mobile_no: data.mobile_no
-        }, { where: { id: data.id } });
+        const data = schema.value; 
+        const result = await userAddress.update({ user_id: data.user_id, house_no: data.house_no, floor_no: data.floor_no, address: data.address, landmark: data.landmark, 
+            city: data.city, state: data.state, country: data.country, pincode: data.pincode, mobile_no: data.mobile_no }, { where: { id: data.id } });
         if (result) {
             resp.status = true;
             resp.message = 'Update Data SuccessFull';
@@ -117,9 +115,13 @@ const deleteRow = async (req, res) => {
     }
     try {
         const data = schema.value;
-        await userAddress.destroy({ where: { id: data.id } });
-        resp.status = true;
-        resp.message = 'Row Delete SuccessFull!';
+        let result = await userAddress.destroy({ where: { id: data.id } });
+        if (result) {
+            resp.status = true;
+            resp.message = 'Row Delete SuccessFull!';
+        } else {
+            resp.message = 'Id Note Found';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);

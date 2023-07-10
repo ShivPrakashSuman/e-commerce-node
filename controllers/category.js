@@ -50,16 +50,17 @@ const store = async (req, res) => {
 const update = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
     const schema = Joi.object({
-        id: Joi.string().required()
-    }).validate(req.query);
+        id: Joi.string().required(),
+        name: Joi.string().required(),
+        desc: Joi.string().required()
+    }).validate(req.body);
     if (schema.error) {
         resp.message = schema.error.details[0].message;
         return res.json(resp);
     }
     try {
-        const data = req.body;
-        console.log('data ', req.body)
-        const result = await productCategory.update({ name: data.name, desc: data.desc }, { where: { id: schema.value.id } });
+        const data = schema.value;
+        const result = await productCategory.update({ name: data.name, desc: data.desc }, { where: { id: data.id } });
         if (result) {
             resp.status = true;
             resp.message = 'Update Data SuccessFull';
@@ -85,9 +86,13 @@ const deleteRow = async (req, res) => {
     }
     try {
         const data = schema.value;
-        await productCategory.destroy({ where: { id: data.id } });
-        resp.status = true;
-        resp.message = 'Row Delete SuccessFull!';
+        let result = await productCategory.destroy({ where: { id: data.id } });
+        if (result) {
+            resp.status = true;
+            resp.message = 'Row Delete SuccessFull!';
+        } else {
+            resp.message = 'Id Note Found';
+        }
         return res.json(resp);
     } catch (e) {
         console.log('catch error', e);

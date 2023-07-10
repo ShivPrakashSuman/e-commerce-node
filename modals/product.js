@@ -38,9 +38,9 @@ const product = db.sequelize.define('product', {
 });
 
 // //  JOIN Tables ----
-// product.belongsTo(productCategory, { foreignKey: 'category_id' });
-// product.belongsTo(productInventory, { foreignKey: 'inventory_id' });
-// product.belongsTo(productDiscount, { foreignKey: 'discount_id' });
+product.belongsTo(productCategory, { foreignKey: 'category_id' });
+product.belongsTo(productInventory, { foreignKey: 'inventory_id' });
+product.belongsTo(productDiscount, { foreignKey: 'discount_id' });
 
 product.sync().then(() => {
     //console.log('product table created successfully!');

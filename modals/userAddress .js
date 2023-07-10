@@ -38,7 +38,7 @@ const user_address = db.sequelize.define('user_address', {
         type: DataTypes.INTEGER
     },
     mobile_no: {
-        type: DataTypes.INTEGER
+        type: DataTypes.STRING(255)
     }
 }, {
     tableName: 'user_address',

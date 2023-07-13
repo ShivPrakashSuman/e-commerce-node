@@ -4,7 +4,7 @@ const config = require('../config/jwt_config');
 const verifyToken = (req, res, next) => {
     let allowURL = [
         '/authentication/login',
-        '/authentication/signup',
+        '/authentication/register',
         '/reset',
         '/uploads'
     ];

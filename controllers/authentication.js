@@ -6,8 +6,9 @@ const sendMail = require('../helper/mail');
 const config = require('../config/jwt_config');
 const { password } = require("../config/db");
 
-const signup = async (req, res) => {
+const register = async (req, res) => {
     let resp = { status: false, message: 'Oops Somethimg went wrong?', data: null };
+    console.log('click',req.body);
     const schema = Joi.object({
         first_name: Joi.string().required(),
         last_name: Joi.string().required(),
@@ -159,4 +160,4 @@ const reset = async (req, res) => {
     }
 }
 
-module.exports = { signup, login, forgot, reset }
+module.exports = { register, login, forgot, reset }

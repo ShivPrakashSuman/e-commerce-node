@@ -2,6 +2,7 @@ const Joi = require("joi");
 const wish_list = require('../modals/wish_list');
 const { Op } = require("sequelize");
 const pagination  = require("../helper/paginationApi");
+const product = require("../modals/product");
 
 const index = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
@@ -9,9 +10,12 @@ const index = async (req, res) => {
         let totalRow = JSON.parse(JSON.stringify(await wish_list.findAll()));
         let pg = await pagination(totalRow, req.query);  // pagination  Api ----
         data = await wish_list.findAll({
+            include:[
+                {model:product, attributes:['id', 'name', 'price']}
+            ],
             limit: pg.limit,
             offset: pg.offset,
-            order: [[pg.order_by, pg.order_type]],
+            order: [[pg.order_by, pg.order_type]], 
         });
         let result = JSON.parse(JSON.stringify(data));
         if (result) {

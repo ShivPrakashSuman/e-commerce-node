@@ -5,6 +5,7 @@ const verifyToken = (req, res, next) => {
     let allowURL = [
         '/authentication/login',
         '/authentication/register',
+        '/authentication/forgot',
         '/reset',
         '/uploads'
     ];

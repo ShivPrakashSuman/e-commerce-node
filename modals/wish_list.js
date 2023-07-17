@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const db = require('../helper/db');
+const product = require('./product');
 
 const wish_list = db.sequelize.define('wish_list', {
     id: {
@@ -18,6 +19,7 @@ const wish_list = db.sequelize.define('wish_list', {
     tableName: "wish_list",
     freezeTableName: true
 });
+wish_list.belongsTo(product, { foreignKey: 'product_id' });
 wish_list.sync().then(() => {
     //console.log('wish List Table table created successfully!');
 }).catch((error) => {

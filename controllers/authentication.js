@@ -8,7 +8,6 @@ const { password } = require("../config/db");
 
 const register = async (req, res) => {
     let resp = { status: false, message: 'Oops Somethimg went wrong?', data: null };
-    console.log('click',req.body);
     const schema = Joi.object({
         first_name: Joi.string().required(),
         last_name: Joi.string().required(),

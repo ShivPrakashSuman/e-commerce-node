@@ -4,7 +4,7 @@ const app = Router();
 
 app.post('/register', authController.register);
 app.post('/login', authController.login);
-app.get('/forgot', authController.forgot);
+app.post('/forgot', authController.forgot);
 app.get('/reset', authController.reset);
 
 module.exports = app;

@@ -6,6 +6,7 @@ const verifyToken = (req, res, next) => {
         '/authentication/login',
         '/authentication/register',
         '/authentication/forgot',
+        '/authentication/reset',
         '/reset',
         '/uploads'
     ];

@@ -109,7 +109,7 @@ const forgot = async (req, res) => {
                 let fatchData = JSON.parse(JSON.stringify(emailExist));
                 const salt = bcrypt.genSaltSync(10);
                 const token = bcrypt.hashSync((fatchData.email), salt);
-                const path = 'http://localhost:3003/reset';
+                const path = 'http://localhost:4200/reset';  // http://localhost:3003/reset
                 await User.update({ forget_pass_code: token }, { where: { id: fatchData.id } });  // Save Forgot token ----
                 await sendMail(fatchData, token, path);
                 resp.status = true;

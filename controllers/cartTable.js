@@ -11,10 +11,20 @@ const index = async (req, res) => {
             ]
         });
         let result = JSON.parse(JSON.stringify(data));
+
+        var array = new Array();
+        for (var i=0; i < result.length; i++){
+             let price = result[i].product.price;
+             array.push(price);
+            }
+
         if (result) {
             resp.status = true;
             resp.message = 'Data Fatch SuccessFull';
-            resp.data = result;
+            resp.data = {
+                data: result,
+                totalPrice: await productPriceSum(array)
+            };
         } else {
             resp.message = 'Not Record Found';
         }
@@ -23,6 +33,18 @@ const index = async (req, res) => {
         console.log('catch error', e);
         return res.json(resp);
     }
+}
+
+const productPriceSum = (obj) => {             //  product price sum  -----------------
+    return new Promise(async (resolve, reject) => {
+        var sum = 0;
+        for( var el in obj ) {
+            if( obj.hasOwnProperty( el ) ) {
+            sum += parseFloat( obj[el] );
+            }
+        }
+        resolve(sum);
+    });
 }
 
 const store = async (req, res) => {

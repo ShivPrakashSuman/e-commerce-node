@@ -2,14 +2,16 @@ const Joi = require("joi");
 const order_list = require('../modals/order_list');
 const { Op } = require("sequelize");
 const pagination  = require("../helper/paginationApi");
+const userAddress = require('../modals/userAddress ');
 
 const index = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
+    
     try {
         let totalRow = JSON.parse(JSON.stringify(await order_list.findAll()));
-        let pg = await pagination (totalRow, req.query);  // pagination  Api ----
+        let pg = await pagination(totalRow, req.query);  // pagination  Api ----
 
-        data = await order_list.findAll({
+        let data = await order_list.findAll({
             where: {
                 [Op.or]: [
                     { 'total': { [Op.like]: '%' + pg.search + '%' } },
@@ -104,7 +106,12 @@ const show = async (req, res) => {
         return res.json(resp);
     }
     try {
-        const data = await order_list.findOne({ where: { id: schema.value.id } });
+        const data = await order_list.findAll({ 
+            include    : [
+                { model: userAddress }
+            ],
+            where: { id: schema.value.id }
+        });
         const result = JSON.parse(JSON.stringify(data));
         if (result) {
             resp.status = true;

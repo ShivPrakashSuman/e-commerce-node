@@ -2,7 +2,7 @@
 const pagination = async (totalRow, req) => {
     return new Promise(async (resolve, reject) => {
         var search = req.search ? req.search : '';
-        var limit = req.limit ? req.limit : 2;
+        var limit = req.limit ? req.limit : 5;
         var page = req.page ? req.page : 1;
         var order_by = req.order_by ? req.order_by : 'id';
         var order_type = req.order_type ? req.order_type : 'ASC';  // ASC / DESC
@@ -17,7 +17,7 @@ const pagination = async (totalRow, req) => {
         totalPage = Math.ceil(total / limit);  // Total Page Count -
         let data = {
             page: page,
-            limit: limit,
+            limit: Number(limit),
             offset: offset,
             totalPage: totalPage,
             totalRow: total,

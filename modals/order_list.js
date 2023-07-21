@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const db = require("../helper/db.js");
+const userAddress = require('./userAddress .js');
 
 const order_list = db.sequelize.define('order_list', {
     id: {
@@ -30,6 +31,7 @@ const order_list = db.sequelize.define('order_list', {
     freezeTableName: true
 });
 
+order_list.belongsTo(userAddress, { foreignKey: 'user_id' });
 order_list.sync().then(() => {
     //console.log('order list table created successfully!');
 }).catch((error) => {

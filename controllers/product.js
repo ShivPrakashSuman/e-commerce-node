@@ -154,7 +154,14 @@ const show = async (req, res) => {
     }
     try {
         const data = schema.value;
-        const result = await product.findOne({ where: { id: data.id } });
+        const result = await product.findOne({ 
+            include    : [
+                { model: productCategory,attributes:['name', 'desc'] },
+                { model: productDiscount, attributes:['name', 'desc', 'discount_percent'] },
+                { model: productInventory }
+            ],
+            where: { id: data.id } 
+        });
         if (result) {
             resp.status = true;
             resp.message = 'Row Data Fatch SuccessFull';

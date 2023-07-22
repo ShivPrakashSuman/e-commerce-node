@@ -15,15 +15,16 @@ const index = async (req, res) => {
         var array = new Array();
         for (var i=0; i < result.length; i++){
              let price = result[i].product.price;
-             array.push(price);
+             let quantity = result[i].quantity;
+             array.push({'price':price, 'quantity':quantity});
             }
-
+        
         if (result) {
             resp.status = true;
             resp.message = 'Data Fatch SuccessFull';
             resp.data = {
                 data: result,
-                totalPrice: await productPriceSum(array)
+                totalRecord: await quantityMultiplySum(array)
             };
         } else {
             resp.message = 'Not Record Found';
@@ -34,13 +35,26 @@ const index = async (req, res) => {
         return res.json(resp);
     }
 }
+const quantityMultiplySum = (obj) => {             //  product quantity Multiply price  -----------------
+    return new Promise(async (resolve, reject) => {
+        var multiply = new Array();
+        for( var el in obj ) {
+            multiply.push((obj[el].price)*(obj[el].quantity));
+        }
+        let data = {
+            multiply: multiply,
+            priceSum: await productPriceSum(multiply)
+        }
+        resolve(data);
+    });
+}
 
 const productPriceSum = (obj) => {             //  product price sum  -----------------
     return new Promise(async (resolve, reject) => {
         var sum = 0;
         for( var el in obj ) {
             if( obj.hasOwnProperty( el ) ) {
-            sum += parseFloat( obj[el] );
+                sum += parseFloat( obj[el] );
             }
         }
         resolve(sum);
@@ -78,18 +92,15 @@ const store = async (req, res) => {
 const update = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
     const schema = Joi.object({
-        id: Joi.string().required(),
-        user_id: Joi.string().required(),
-        product_id: Joi.string().required(),
-        quantity: Joi.string().required()
-    }).validate(req.body);
+        id: Joi.string().required()
+    }).validate(req.query);
     if (schema.error) {
         resp.message = schema.error.details[0].message;
         return res.json(resp);
     }
     try {
-        const data = schema.value;
-        const result = await cart_table.update({ user_id: data.user_id, product_id: data.product_id, quantity: data.quantity }, { where: { id: data.id } });
+        const data = req.body;
+        const result = await cart_table.update({ user_id: data.user_id, product_id: data.product_id, quantity: data.quantity }, { where: { id: schema.value.id } });
         if (result) {
             resp.status = true;
             resp.message = 'Update Data SuccessFull';

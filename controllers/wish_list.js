@@ -52,7 +52,7 @@ const store = async (req, res) => {
         const result = await wish_list.create(data);  // Insert data with Create Table 
         if (result) {
             resp.status = true;
-            resp.message = 'Cart Table Registered Successfully';
+            resp.message = 'Wish List Registered Successfully';
             resp.data = result;
         } else {
             resp.message = 'Registered Failed ?';

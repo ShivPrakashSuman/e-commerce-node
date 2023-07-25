@@ -11,7 +11,6 @@ const index = async (req, res) => {
     try {
         let totalRow = JSON.parse(JSON.stringify(await product.findAll()));
         let pg = await pagination (totalRow, req.query);  // pagination  Api ----
-
         let rows = await product.findAll({
             include    : [
                 { model: productCategory,

@@ -70,26 +70,16 @@ const store = async (req, res) => {
 const update = async (req, res) => {
     let resp = { status: false, message: 'Oops Something went worng', data: null };
     const schema = Joi.object({
-        id: Joi.string().required(),
-        user_id: Joi.string().required(),
-        house_no: Joi.string().required(),
-        floor_no: Joi.string().required(),
-        address: Joi.string().required(),
-        landmark: Joi.string().required(),
-        city: Joi.string().required(),
-        state: Joi.string().required(),
-        country: Joi.string().required(),
-        pincode: Joi.string().required(),
-        mobile_no: Joi.string().required()
-    }).validate(req.body);
+        id: Joi.string().required()
+    }).validate(req.query);
     if (schema.error) {
         resp.message = schema.error.details[0].message;
         return res.json(resp);
     }
     try {
-        const data = schema.value; 
+        const data = req.body; 
         const result = await userAddress.update({ user_id: data.user_id, house_no: data.house_no, floor_no: data.floor_no, address: data.address, landmark: data.landmark, 
-            city: data.city, state: data.state, country: data.country, pincode: data.pincode, mobile_no: data.mobile_no }, { where: { id: data.id } });
+            city: data.city, state: data.state, country: data.country, pincode: data.pincode, mobile_no: data.mobile_no }, { where: { id: schema.value.id } });
         if (result) {
             resp.status = true;
             resp.message = 'Update Data SuccessFull';

@@ -7,7 +7,7 @@ const payApi = async (user_id,plan_id) => {
     return new Promise(async (resolve, reject) => {
         let settingData = await getSettings(user_id);  // set login user id 
         let peyData = await paymentData(plan_id);   //  set prodect id 
-        let userData = await getLoginUser(plan_id); // set login user id 
+        let userData = await getLoginUser(user_id); // set login user id 
 
         var options = {         //  Payment  Options     --------------------------
             "key": settingData.key,
@@ -27,16 +27,6 @@ const payApi = async (user_id,plan_id) => {
                 "color": settingData.theme
             }
         }
-
-        // options['handler'] = async (response) => {
-        //     console.log('payment SuccessFul id-', response.razorpay_payment_id, id);
-        //     // await this.handle_response(response.razorpay_payment_id, id);  //this returns the expected value 
-        // };
-        // var rzp1 = new Razorpay(options);
-        // rzp1.open();
-        // rzp1.on('payment.failed', function (respons) {
-        //     console.log('err', respons.error);
-        // });
         resolve(options);
     });
 }
@@ -63,6 +53,11 @@ const paymentData = async (id) => {       //  Plan  get    -----------------
             let amount = result.price;
             let title = result.name;
             let description = result.desc;
+            resolve({ amount, title, description });
+        } else {
+            let amount = id;
+            let title = 'All Cart Product';
+            let description = 'Thank you Very much for giving us a chance'
             resolve({ amount, title, description });
         }
     });

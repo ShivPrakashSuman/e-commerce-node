@@ -46,6 +46,7 @@ const store = async (req, res) => {
     const schema = Joi.object({
         user_id: Joi.string().required(),
         order_id: Joi.string().required(),
+        payment_id: Joi.string().required(),
         date_purchased: Joi.string().required(),
         status: Joi.string().required(),
         total: Joi.string().required()

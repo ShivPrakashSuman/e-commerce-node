@@ -11,7 +11,7 @@ const index = async (req, res) => {
         let pg = await pagination(totalRow, req.query);  // pagination  Api ----
         data = await wish_list.findAll({
             include:[
-                {model:product, attributes:['id', 'name', 'price']}
+                {model:product, attributes:['id', 'name', 'price', 'discount_id']},
             ],
             limit: pg.limit,
             offset: pg.offset,

@@ -15,6 +15,9 @@ const order_list = db.sequelize.define('order_list', {
     order_id: {
         type: DataTypes.INTEGER
     },
+    payment_id: {
+        type: DataTypes.STRING(255)
+    },
     date_purchased: {
         type: Sequelize.DATEONLY,
         allowNull: false,

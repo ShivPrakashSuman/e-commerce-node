@@ -8,7 +8,8 @@ const verifyToken = (req, res, next) => {
         '/authentication/forgot',
         '/authentication/reset',
         '/reset',
-        '/uploads'
+        '/uploads',
+        '/product'
     ];
     if (allowURL.includes(req.path) || (req.path.search(/uploads/) > -1 ? true : false)) {
         return next();

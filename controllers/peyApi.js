@@ -9,7 +9,6 @@ const subscription = async (req, res) => {
 
     try {
         let loginUser = 1;
-        console.log('dat',req.user)
         let result = await payApi(loginUser, Schema.value.amount);
         if (result) {
             resp.status = true;

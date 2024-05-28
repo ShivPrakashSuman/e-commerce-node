@@ -18,12 +18,12 @@ const cors = require("cors");
 const path = require('path');
 var app = express();
 app.use(verifyToken);
-// const corsOrigin ={
-//     origin:'http://localhost:4200', //or whatever port your frontend is using
-//     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-//     credentials:true,            
-//     optionSuccessStatus:204
-// }
+const corsOrigin ={
+    origin:'http://localhost:4200', //or whatever port your frontend is using
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials:true,            
+    optionSuccessStatus:204
+}
 app.use(cors());
 
 //convert body data to json for nodejs controller
